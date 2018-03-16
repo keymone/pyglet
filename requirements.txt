@@ -1,7 +1,8 @@
 ipdb
 ipython
+numpy
+glfw
 PyOpenGL
 # numpy
 # Pillow
-# PySDL2
 # PyTMX
