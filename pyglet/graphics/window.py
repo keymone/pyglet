@@ -1,4 +1,5 @@
 import glfw
+from OpenGL.GL import *
 
 
 class Window:
@@ -28,11 +29,17 @@ class Window:
 
         glfw.set_key_callback(self.window, key_callback or self.key_callback)
 
+        self.time = self.get_time()
+
     def should_close(self):
         return glfw.window_should_close(self.window)
 
     def swap_buffers(self):
         return glfw.swap_buffers(self.window)
+
+    def clear(self):
+        glViewport(0, 0, self.width, self.height)
+        glClear(GL_COLOR_BUFFER_BIT)
 
     @staticmethod
     def key_callback(window, key, _scancode, action, _mods):
@@ -50,3 +57,9 @@ class Window:
     @staticmethod
     def get_time():
         return glfw.get_time()
+
+    def get_time_delta(self):
+        time = self.get_time()
+        delta = time - self.time
+        self.time = time
+        return delta
