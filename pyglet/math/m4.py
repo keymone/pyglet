@@ -1,8 +1,12 @@
 import numpy
 import math
 
+
 class M4:
     def __init__(self, data=None):
+        if data is None:
+            data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
         self.m = numpy.array(data, dtype=numpy.float32).reshape(4, 4)
         self.nbytes = self.m.nbytes
 
@@ -52,6 +56,9 @@ class M4:
             0, 0, -2.0/(f-n), 0,
             -(r+l)/(r-l), -(t+b)/(t-b), -(f+n)/(f-n), 1.0
         ])
+
+    def mul(self, other, out):
+        numpy.matmul(self.m, other.m, out=out.m)
 
     def __mul__(self, other):
         if isinstance(other, int) or isinstance(other, float):

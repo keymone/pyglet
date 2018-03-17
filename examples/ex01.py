@@ -16,13 +16,12 @@ def main():
         Point2((0.6, -0.4), (0, 1, 0)),
         Point2((0, 0.6), (0, 0, 1))
     )
+    tri.ortho(-ratio, ratio, -1, 1, 1, -1)
 
     while not window.should_close():
         window.clear()
 
-        tri.reset()
-        tri.rotate(window.get_time())
-        tri.ortho(-ratio, ratio, -1, 1, 1, -1)
+        tri.rotate(window.get_time_delta())
         tri.draw()
 
         window.swap_buffers()
