@@ -1,5 +1,6 @@
 import glfw
 from OpenGL.GL import *
+from OpenGL.GLUT import *
 
 
 class Window:
@@ -16,6 +17,11 @@ class Window:
         if not glfw.init():
             raise Exception("Couldn't init glfw")
 
+        # glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
+        # glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 2)
+        # glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, True)
+        # glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+
         # Create a windowed mode window and its OpenGL context
         self.window = glfw.create_window(width, height, title, None, None)
 
@@ -30,6 +36,8 @@ class Window:
         glfw.set_key_callback(self.window, key_callback or self.key_callback)
 
         self.time = self.get_time()
+
+        print("OpenGL: " + str(glGetString(GL_VERSION)))
 
     def should_close(self):
         return glfw.window_should_close(self.window)
