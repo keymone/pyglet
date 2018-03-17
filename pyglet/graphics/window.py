@@ -28,21 +28,25 @@ class Window:
 
         glfw.set_key_callback(self.window, key_callback or self.key_callback)
 
-    @staticmethod
-    def key_callback(window, key, _scancode, action, _mods):
-        if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
-            glfw.set_window_should_close(window, True)
-
     def should_close(self):
         return glfw.window_should_close(self.window)
 
     def swap_buffers(self):
         return glfw.swap_buffers(self.window)
 
-    @classmethod
-    def poll_events(cls):
+    @staticmethod
+    def key_callback(window, key, _scancode, action, _mods):
+        if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+            glfw.set_window_should_close(window, True)
+
+    @staticmethod
+    def poll_events():
         glfw.poll_events()
 
-    @classmethod
-    def terminate(cls):
+    @staticmethod
+    def terminate():
         glfw.terminate()
+
+    @staticmethod
+    def get_time():
+        return glfw.get_time()
