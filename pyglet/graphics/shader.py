@@ -7,25 +7,31 @@ class Shader:
     def __init__(self, vsrc, fsrc):
         self.uniforms = {}
         self.attribs = {}
-
-        self.vsrc = vsrc
-        self.fsrc = fsrc
-
         self.prog = glCreateProgram()
-
-        self.vshader = glCreateShader(GL_VERTEX_SHADER)
-        glShaderSource(self.vshader, self.vsrc)
-        glCompileShader(self.vshader)
-        glAttachShader(self.prog, self.vshader)
-
-        self.fshader = glCreateShader(GL_FRAGMENT_SHADER)
-        glShaderSource(self.fshader, self.fsrc)
-        glCompileShader(self.fshader)
-        glAttachShader(self.prog, self.fshader)
-
+        vshader = self.compile(vsrc, GL_VERTEX_SHADER)
+        fshader = self.compile(fsrc, GL_FRAGMENT_SHADER)
         glLinkProgram(self.prog)
+        glDeleteShader(vshader)
+        glDeleteShader(fshader)
+
+    def compile(self, src, kind):
+        shader = glCreateShader(kind)
+        glShaderSource(shader, src)
+        glCompileShader(shader)
+        status = ctypes.c_int()
+        glGetShaderiv(shader, GL_COMPILE_STATUS, ctypes.byref(status))
+
+        if not status.value:
+            print(glGetShaderInfoLog(shader))
+            glDeleteShader(shader)
+            raise (ValueError, 'Shader compilation failed')
+
+        glAttachShader(self.prog, shader)
+
+        return shader
 
     def def_uniform(self, uname):
+        glUseProgram(self.prog)
         self.uniforms[uname] = glGetUniformLocation(self.prog, uname)
 
     TYPES = {

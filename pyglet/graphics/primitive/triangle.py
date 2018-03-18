@@ -12,29 +12,41 @@ class Triangle:
         self.c = c
 
         self.vertices = None
+
+        self.va = glGenVertexArrays(1)
+        glBindVertexArray(self.va)
+
         self.vbuf = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, self.vbuf)
-        #glEnableVertexAttribArray(0)
+        glEnableVertexAttribArray(0)
 
         self.shader = Shader(
             vsrc="""
-        uniform mat4 MVP;
-        attribute vec4 vCol;
-        attribute vec4 vPos;
-        varying vec4 color;
-        void main()
-        {
-            gl_Position = MVP * vPos;
-            color = vCol;
-        }
-        """,
+                #version 330 core
+
+                uniform mat4 MVP;
+                in vec4 vCol;
+                in vec4 vPos;
+
+                out vec4 color;
+
+                void main()
+                {
+                    gl_Position = MVP * vPos;
+                    color = vCol;
+                }
+            """,
             fsrc="""
-        varying vec4 color;
-        void main()
-        {
-            gl_FragColor = color;
-        }
-        """
+                #version 330 core
+
+                in vec4 color;
+                out vec4 fragColor;
+
+                void main()
+                {
+                    fragColor = color;
+                }
+            """
         )
 
         self.shader.def_uniform("MVP")
