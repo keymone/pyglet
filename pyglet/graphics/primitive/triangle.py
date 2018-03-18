@@ -1,27 +1,15 @@
-from OpenGL.GL import *
+from OpenGL.GL import glDrawArrays, GL_TRIANGLES
 import numpy
 
-from pyglet.graphics.shader import Shader
-from pyglet.math import M4
+from pyglet.graphics.primitive.shape import Shape
 
 
-class Triangle:
+class Triangle(Shape):
     def __init__(self, a, b, c):
         self._a = a
         self._b = b
         self._c = c
-
-        self.va = glGenVertexArrays(1)
-        glBindVertexArray(self.va)
-
-        self.vbuf = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, self.vbuf)
-
-        self.shader = Shader.default_shader()
-        self.mvp = M4.identity()
-
-        self.is_dirty = True
-        self.write_data()
+        super().__init__()
 
     @property
     def a(self):
@@ -53,38 +41,13 @@ class Triangle:
             self.is_dirty = True
             self._c = val
 
-    def write_data(self):
-        glBindVertexArray(self.va)
-        glBindBuffer(GL_ARRAY_BUFFER, self.vbuf)
-
-        vertices = numpy.array([
+    def get_data(self):
+        return numpy.array([
             *self._a.pos, *self._a.col,
             *self._b.pos, *self._b.col,
             *self._c.pos, *self._c.col,
         ], dtype=numpy.float32)
 
-        glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
-
-    def reset(self):
-        self.mvp = M4.identity()
-
-    def rotate(self, *args):
-        self.mvp *= M4.rotate(*args)
-
-    def ortho(self, *args):
-        self.mvp *= M4.ortho(*args)
-
-    def translate(self, *args):
-        self.mvp *= M4.translate(*args)
-
-    def scale(self, *args):
-        self.mvp *= M4.scale(*args)
-
     def draw(self):
-        if self.is_dirty:
-            self.write_data()
-
-        self.shader.bind({'MVP': ('Matrix4fv', 1, Shader.FALSE, self.mvp.m)})
-        glBindVertexArray(self.va)
+        super().draw()
         glDrawArrays(GL_TRIANGLES, 0, 3)
-        glBindVertexArray(0)
