@@ -1,4 +1,4 @@
-class Point:
+class VC:
     def __init__(self, pos, col):
         if len(pos) == 2:
             pos = [*pos, 0, 1]

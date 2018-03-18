@@ -5,8 +5,7 @@ import math
 class M4:
     def __init__(self, data=None):
         if data is None:
-            data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
+            data = numpy.zeros(16)
         self.m = numpy.array(data, dtype=numpy.float32).reshape(4, 4)
         self.nbytes = self.m.nbytes
 
@@ -67,4 +66,4 @@ class M4:
             return M4(numpy.matmul(self.m, other.m))
 
     def __repr__(self):
-        return "{}".format(self.m)
+        return self.m.__repr__()

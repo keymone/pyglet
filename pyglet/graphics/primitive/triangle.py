@@ -18,7 +18,7 @@ class Triangle(Shape):
     @a.setter
     def a(self, val):
         if self._a != val:
-            self.is_dirty = True
+            self.dirty_data = True
             self._a = val
 
     @property
@@ -28,7 +28,7 @@ class Triangle(Shape):
     @b.setter
     def b(self, val):
         if self._b != val:
-            self.is_dirty = True
+            self.dirty_data = True
             self._b = val
 
     @property
@@ -38,7 +38,7 @@ class Triangle(Shape):
     @c.setter
     def c(self, val):
         if self._c != val:
-            self.is_dirty = True
+            self.dirty_data = True
             self._c = val
 
     def get_data(self):

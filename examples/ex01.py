@@ -1,35 +1,41 @@
+import random
+import time
+
 from pyglet.graphics.window import Window
 from pyglet.graphics.primitive.triangle import Triangle
-from pyglet.graphics.primitive.point import Point
+from pyglet.graphics.primitive.vc import VC
 
 
 def main():
     window = Window()
     ratio = float(window.width) / window.height
 
-    tri = Triangle(
-        Point((-0.6, -0.4), (1, 0, 0)),
-        Point((0.6, -0.4), (0, 1, 0)),
-        Point((0, 0.6), (0, 0, 1))
-    )
-    tri.ortho(-ratio, ratio, -1, 1, 1, -1)
-
-    tri2 = Triangle(
-        Point([0, 0], [1, 0, 0]),
-        Point([0, 1], [0, 1, 0]),
-        Point([1, 0], [0, 0, 1])
-    )
-    tri2.ortho(-ratio, ratio, -1, 1, 1, -1)
+    tris = [
+        (
+            Triangle(
+                VC([random.random(), random.random()], [1, 0, 0]),
+                VC([random.random(), random.random()], [0, 1, 0]),
+                VC([random.random(), random.random()], [0, 0, 1])
+            ),
+            50*(random.random()-0.5)
+        )
+        for _ in range(1000)
+    ]
+    for tri, _ in tris:
+        tri.ortho(-ratio, ratio, -1, 1, 1, -1)
 
     while not window.should_close():
         window.clear()
 
-        tri.rotate(window.get_time_delta()*10)
-        tri.draw()
+        delta = window.get_time_delta()
 
-        tri2.a.pos[0] += 0.01
-        tri2.is_dirty = True
-        tri2.draw()
+        start = time.time()
+
+        for tri, angle in tris:
+            tri.rotate(angle*delta)
+            tri.draw()
+
+        print("%.5f" % (time.time() - start))
 
         window.swap_buffers()
         Window.poll_events()
