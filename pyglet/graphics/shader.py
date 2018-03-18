@@ -72,3 +72,40 @@ class Shader:
 
             f = getattr(OpenGL.GL, 'glUniform' + t)
             f(u, *v[1:])
+
+    @staticmethod
+    def default_shader():
+        shader = Shader(
+            vsrc="""
+                #version 330 core
+
+                uniform mat4 MVP;
+                in vec4 vCol;
+                in vec4 vPos;
+
+                out vec4 color;
+
+                void main()
+                {
+                    gl_Position = MVP * vPos;
+                    color = vCol;
+                }
+            """,
+            fsrc="""
+                #version 330 core
+
+                in vec4 color;
+                out vec4 fragColor;
+
+                void main()
+                {
+                    fragColor = color;
+                }
+            """
+        )
+
+        shader.def_uniform("MVP")
+        shader.def_attrib("vPos", {'size': 4, 'stride': 8})
+        shader.def_attrib("vCol", {'size': 4, 'stride': 8, 'offset': 4})
+
+        return shader

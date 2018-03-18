@@ -15,9 +15,9 @@ def main():
     tri.ortho(-ratio, ratio, -1, 1, 1, -1)
 
     tri2 = Triangle(
-        Point((0, 0), (1, 0, 0)),
-        Point((0, 1), (0, 1, 0)),
-        Point((1, 0), (0, 0, 1))
+        Point([0, 0], [1, 0, 0]),
+        Point([0, 1], [0, 1, 0]),
+        Point([1, 0], [0, 0, 1])
     )
     tri2.ortho(-ratio, ratio, -1, 1, 1, -1)
 
@@ -26,6 +26,9 @@ def main():
 
         tri.rotate(window.get_time_delta()*10)
         tri.draw()
+
+        tri2.a.pos[0] += 0.01
+        tri2.is_dirty = True
         tri2.draw()
 
         window.swap_buffers()
