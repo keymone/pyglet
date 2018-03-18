@@ -29,13 +29,9 @@ def main():
 
         delta = window.get_time_delta()
 
-        start = time.time()
-
         for tri, angle in tris:
             tri.rotate(angle*delta)
             tri.draw()
-
-        print("%.5f" % (time.time() - start))
 
         window.swap_buffers()
         Window.poll_events()
