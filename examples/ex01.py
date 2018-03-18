@@ -1,9 +1,9 @@
 import random
 import time
 
-from pyglet.graphics.window import Window
-from pyglet.graphics.primitive.triangle import Triangle
-from pyglet.graphics.primitive.vc import VC
+from pyglet.graphics import Window
+from pyglet.graphics.primitive import Triangle
+from pyglet.graphics.primitive import VC
 
 
 def main():

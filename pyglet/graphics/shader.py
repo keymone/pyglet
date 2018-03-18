@@ -1,5 +1,5 @@
 from OpenGL.GL import *
-import OpenGL.GL as GL
+from OpenGL.GL import shaders
 import ctypes
 
 
@@ -7,28 +7,11 @@ class Shader:
     def __init__(self, vsrc, fsrc):
         self.uniforms = {}
         self.attribs = {}
-        self.prog = glCreateProgram()
-        vshader = self.compile(vsrc, GL_VERTEX_SHADER)
-        fshader = self.compile(fsrc, GL_FRAGMENT_SHADER)
+        self.prog = shaders.compileProgram(
+            shaders.compileShader(vsrc, GL_VERTEX_SHADER),
+            shaders.compileShader(fsrc, GL_FRAGMENT_SHADER),
+        )
         glLinkProgram(self.prog)
-        glDeleteShader(vshader)
-        glDeleteShader(fshader)
-
-    def compile(self, src, kind):
-        shader = glCreateShader(kind)
-        glShaderSource(shader, src)
-        glCompileShader(shader)
-        status = ctypes.c_int()
-        glGetShaderiv(shader, GL_COMPILE_STATUS, ctypes.byref(status))
-
-        if not status.value:
-            print(glGetShaderInfoLog(shader))
-            glDeleteShader(shader)
-            raise (ValueError, 'Shader compilation failed')
-
-        glAttachShader(self.prog, shader)
-
-        return shader
 
     def def_uniform(self, uname):
         glUseProgram(self.prog)
@@ -70,7 +53,7 @@ class Shader:
             u = self.uniforms[k]
             t = v[0]
 
-            f = getattr(OpenGL.GL, 'glUniform' + t)
+            f = globals()['glUniform' + t]
             f(u, *v[1:])
 
     @staticmethod

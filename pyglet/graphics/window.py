@@ -1,12 +1,11 @@
 import glfw
 from OpenGL.GL import *
-from OpenGL.GLUT import *
 
 
 class Window:
     def __init__(self,
-                 width=600,
-                 height=400,
+                 width=800,
+                 height=600,
                  title='glfw',
                  make_current=True,
                  key_callback=None):

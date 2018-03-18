@@ -1,11 +1,8 @@
-import random
-import time
-
-from threading import Thread, RLock
 from IPython import embed
-from pyglet.graphics.window import Window
-from pyglet.graphics.primitive.triangle import Triangle
-from pyglet.graphics.primitive.vc import VC
+from threading import Thread, RLock
+from pyglet.graphics import Window
+from pyglet.graphics.primitive import Triangle
+from pyglet.graphics.primitive import VC
 
 
 def main():
