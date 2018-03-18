@@ -7,6 +7,16 @@ from pyglet.math import M4
 
 class Shape:
     def __init__(self):
+        self.va = None
+        self.vbuf = None
+        self.shader = None
+        self.mvp = M4.identity()
+
+        self.ready = False
+        self.dirty_data = True
+        self.dirty_mvp = True
+
+    def setup(self):
         self.va = glGenVertexArrays(1)
         glBindVertexArray(self.va)
 
@@ -14,12 +24,6 @@ class Shape:
         glBindBuffer(GL_ARRAY_BUFFER, self.vbuf)
 
         self.shader = Shader.default_shader()
-        self.mvp = M4.identity()
-
-        self.dirty_data = True
-        self.dirty_mvp = True
-
-        self.sync()
 
     def mark_dirty_data(self):
         self.dirty_data = True
@@ -63,5 +67,9 @@ class Shape:
         self.mvp *= M4.scale(*args)
 
     def draw(self):
+        if not self.ready:
+            self.setup()
+            self.ready = True
+
         self.sync()
         glBindVertexArray(self.va)
